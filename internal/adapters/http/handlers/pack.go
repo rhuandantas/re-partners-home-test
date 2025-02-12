@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/rhuandantas/re-partners-home-test/internal/core/usecases"
 	"net/http"
@@ -32,7 +31,7 @@ func (p *Pack) getPackedItems(ctx echo.Context) error {
 	}
 
 	if items < 1 {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "request for at least 1 item"})
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "request for at least 1 item"})
 	}
 
 	packs, err := p.getPackedItemsUseCase.Execute(items)
@@ -49,7 +48,17 @@ func (p *Pack) storePackSizes(ctx echo.Context) error {
 	var sizes []int
 
 	if err := ctx.Bind(&sizes); err != nil {
-		return errors.New("please send an array of sizes like [10,250,1000]")
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "please send an array of sizes like [10,250,1000]"})
+	}
+
+	if len(sizes) == 0 {
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "please send at least one pack size"})
+	}
+
+	for _, size := range sizes {
+		if size < 1 {
+			return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "pack sizes must be greater than 0"})
+		}
 	}
 
 	err := p.storePackSizesUsecase.Execute(sizes)

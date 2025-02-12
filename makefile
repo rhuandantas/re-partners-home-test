@@ -13,3 +13,6 @@ install:
 
 mock:
 	mockgen -source=internal/adapters/repository/cache/memcache.go -package=mock_cache -destination=test/mock/repository/cache/memcache.go
+
+unit-test: install
+	go test -v ./...	
