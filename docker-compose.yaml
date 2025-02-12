@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: api
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - ENV=development
+    networks:
+      - app-network
+    depends_on:
+      - memcached
+
+  memcached:
+    container_name: memcached
+    image: memcached:1.6-alpine
+    ports:
+      - "11211:11211"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
