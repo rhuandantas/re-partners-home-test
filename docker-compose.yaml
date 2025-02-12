@@ -5,13 +5,24 @@ services:
     container_name: api
     build: .
     ports:
-      - "3000:3000"
-    environment:
-      - ENV=development
+      - "3001:3001"
     networks:
       - app-network
     depends_on:
-      - memcached
+      memcached:
+        condition: service_started
+
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    depends_on:
+      - app
+    networks:
+      - app-network
 
   memcached:
     container_name: memcached

@@ -18,7 +18,7 @@ type Server struct {
 
 // NewAPIServer creates the main http with all configurations necessary
 func NewAPIServer(packHandler *handlers.Pack) *Server {
-	host := ":3000"
+	host := ":3001"
 	app := echo.New()
 
 	app.HideBanner = true

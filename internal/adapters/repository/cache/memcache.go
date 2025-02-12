@@ -15,7 +15,7 @@ type memcacheClient struct {
 }
 
 func NewMemcacheClient() MemcacheClient {
-	cacheClient := memcache.New("localhost:11211")
+	cacheClient := memcache.New("memcached:11211")
 	err := cacheClient.Ping()
 	if err != nil {
 		panic(err)
